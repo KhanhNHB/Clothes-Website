@@ -40,11 +40,14 @@
                                 <option selected="true">${categoryDTO.name}</option>
                             </c:if>
                             <c:if test="${counter.count != 0}">
-                                 <option>${categoryDTO.name}</option>
+                                <option>${categoryDTO.name}</option>
                             </c:if>
                         </c:forEach>
                     </select>
                 </div>
+
+                <div class="wrapper-detail-product">Country:</div>
+                <div class="wrapper-info-product"><input type="text" name="txtCountry" value="" /></div>
 
                 <div class="wrapper-detail-product"> <input type="submit" value="Create Product" name="btAction"/> </div>
                 <div class="wrapper-info-product"> <input type="reset" value="Reset" /> </div>

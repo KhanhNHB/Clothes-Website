@@ -18,17 +18,33 @@ public class ProductDTO implements Serializable {
     private String image;
     private String details;
     private String categoryId;
+    private String country;
+    private int quantity;
+    private String size;
 
     public ProductDTO() {
     }
 
-    public ProductDTO(String id, String name, double unitPrice, String image, String details, String categoryId) {
+    public ProductDTO(String id, String name, double unitPrice, String image, String details, String categoryId, String country) {
         this.id = id;
         this.name = name;
         this.unitPrice = unitPrice;
         this.image = image;
         this.details = details;
         this.categoryId = categoryId;
+        this.country = country;
+    }
+
+    public ProductDTO(String id, String name, double unitPrice, String image, String details, String categoryId, String country, int quantity, String size) {
+        this.id = id;
+        this.name = name;
+        this.unitPrice = unitPrice;
+        this.image = image;
+        this.details = details;
+        this.categoryId = categoryId;
+        this.country = country;
+        this.quantity = quantity;
+        this.size = size;
     }
 
     /**
@@ -114,4 +130,51 @@ public class ProductDTO implements Serializable {
     public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
     }
+
+    /**
+     * @return the country
+     */
+    public String getCountry() {
+        return country;
+    }
+
+    /**
+     * @param country the country to set
+     */
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    /**
+     * @return the quantity
+     */
+    public int getQuantity() {
+        return quantity;
+    }
+
+    /**
+     * @param quantity the quantity to set
+     */
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    /**
+     * @return the size
+     */
+    public String getSize() {
+        return size;
+    }
+
+    /**
+     * @param size the size to set
+     */
+    public void setSize(String size) {
+        this.size = size;
+    }
+ 
+    public double totalPrice() {
+        return this.quantity * this.unitPrice;
+    }
+    
 }

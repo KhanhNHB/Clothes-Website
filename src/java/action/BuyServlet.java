@@ -5,14 +5,10 @@
  */
 package action;
 
-import dao.AccountDAO;
-import dto.AccountDTO;
+import cart.CartObj;
+import dto.ProductDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,48 +16,44 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import md5.MD5;
 
 /**
  *
  * @author Hello
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends HttpServlet {
-
-    final private String loginError = "invalid.html";
-    final private String displayServlet = "DisplayServlet";
-
+@WebServlet(name = "BuyServlet", urlPatterns = {"/BuyServlet"})
+public class BuyServlet extends HttpServlet {
+    
+    final private String viewProduct = "viewProduct.jsp";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
         PrintWriter out = response.getWriter();
+        
         try {
-            String url = loginError;
-            String username = request.getParameter("txtUsername");
-            String password = request.getParameter("txtPassword");
-
-            password = MD5.getPasswordEncrypt(password);
-
-            try {
-                AccountDAO accountDAO = new AccountDAO();
-                AccountDTO accountDTO = accountDAO.checkLogin(username, password);
-
-                if (accountDTO != null) {
-                    HttpSession session = request.getSession();
-                    session.setAttribute("ACCOUNT", accountDTO);
-
-                    url = displayServlet;
-                }
-
-                RequestDispatcher rd = request.getRequestDispatcher(url);
-                rd.forward(request, response);
-            } catch (SQLException | NamingException e) {
-                System.out.println(e.getMessage());
-                Logger.getAnonymousLogger().log(Level.CONFIG, "msg", e);
+            
+            HttpSession session = request.getSession();
+            CartObj cart = (CartObj) session.getAttribute("CART");
+            
+            if (cart == null) {
+                cart = new CartObj();
             }
 
+            String productId = request.getParameter("productId");
+            String productName = request.getParameter("productName");
+            String productImage = request.getParameter("productImage");
+            String productPrice = request.getParameter("productPrice");
+            String[] size = request.getParameterValues("cboSize");
+            String[] quantity = request.getParameterValues("cboQuantity");
+
+            ProductDTO productDTO = new ProductDTO(productId, productName, Double.parseDouble(productPrice), productImage, "", "", "", Integer.parseInt(quantity[0]), size[0]);
+            cart.addProductToCart(productDTO);
+            
+            session.setAttribute("CART", cart);
+                
+            RequestDispatcher rd = request.getRequestDispatcher(viewProduct);
+            rd.forward(request, response);
         } finally {
             out.close();
         }

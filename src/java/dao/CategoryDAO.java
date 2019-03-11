@@ -20,8 +20,7 @@ import utils.DBUtils;
  * @author Hello
  */
 public class CategoryDAO {
-    
-    
+
     private Connection con;
     private PreparedStatement ps;
     private ResultSet rs;
@@ -43,26 +42,26 @@ public class CategoryDAO {
     public List<CategoryDTO> getCategory() {
         return categorys;
     }
-    
+
     public List<CategoryDTO> getListCategory() throws SQLException, NamingException {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
                 String sql = "EXEC USP_GetListCategory";
-                
+
                 ps = con.prepareStatement(sql);
-                
+
                 rs = ps.executeQuery();
-                
+
                 String id, name;
                 while (rs.next()) {
                     id = rs.getString("id");
                     name = rs.getString("name");
-                    
+
                     if (this.categorys == null) {
                         this.categorys = new ArrayList<>();
                     }
-                    
+
                     CategoryDTO categoryDTO = new CategoryDTO(id, name);
                     this.categorys.add(categoryDTO);
                 }
@@ -76,44 +75,69 @@ public class CategoryDAO {
     public String getCategoryNameById(String id) throws SQLException, NamingException {
         try {
             con = DBUtils.getConnection();
-            
+
             if (con != null) {
                 String sql = "EXEC USP_GetCategoryNameById ?";
-                
+
                 ps = con.prepareStatement(sql);
-                
+
                 rs = ps.executeQuery();
-                
+
                 if (rs.next()) {
-                   String name = rs.getString("name");
-                   return name;
+                    String name = rs.getString("name");
+                    return name;
                 }
-                
+
             }
         } finally {
             closeConnection();
         }
         return null;
     }
-    
-      public String getCategoryIDByName(String name) throws SQLException, NamingException {
+
+    public String getCategoryIDByName(String name) throws SQLException, NamingException {
         try {
             con = DBUtils.getConnection();
-            
+
             if (con != null) {
                 String sql = "EXEC USP_GetCategoryIDByName ?";
-                
+
                 ps = con.prepareStatement(sql);
-                
+
                 ps.setString(1, name);
-                
+
                 rs = ps.executeQuery();
-                
+
                 if (rs.next()) {
-                   String id = rs.getString("id");
-                   return id;
+                    String id = rs.getString("id");
+                    return id;
                 }
-                
+
+            }
+        } finally {
+            closeConnection();
+        }
+        return null;
+    }
+
+    public CategoryDTO getCategoryByID(String idCategory) throws SQLException, NamingException {
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "EXEC USP_GetCategoryById ?";
+                ps = con.prepareStatement(sql);
+                ps.setString(1, idCategory);
+
+                rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    String id = rs.getString("id");
+                    String name = rs.getString("name");
+
+                    CategoryDTO categoryDTO = new CategoryDTO(id, name);
+                    
+                    return categoryDTO;
+                }
             }
         } finally {
             closeConnection();

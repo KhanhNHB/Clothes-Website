@@ -53,7 +53,7 @@ public class ProductDAO {
 
                 rs = ps.executeQuery();
 
-                String id, name, image, details, categoryId;
+                String id, name, image, details, categoryId, country;
                 double unitPrice;
                 while (rs.next()) {
                     id = rs.getString("id");
@@ -62,12 +62,13 @@ public class ProductDAO {
                     image = rs.getString("image");
                     details = rs.getString("details");
                     categoryId = rs.getString("categoryId");
+                    country = rs.getString("country");
 
                     if (this.products == null) {
                         this.products = new ArrayList<>();
                     }
 
-                    ProductDTO productDTO = new ProductDTO(id, name, unitPrice, image, details, categoryId);
+                    ProductDTO productDTO = new ProductDTO(id, name, unitPrice, image, details, categoryId, country);
 
                     this.products.add(productDTO);
 

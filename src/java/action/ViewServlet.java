@@ -5,11 +5,15 @@
  */
 package action;
 
-import dao.AccountDAO;
-import dto.AccountDTO;
+import dao.CategoryDAO;
+import dao.SizesDAO;
+import dto.CategoryDTO;
+import dto.ProductDTO;
+import dto.SizesDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
@@ -20,48 +24,52 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import md5.MD5;
 
 /**
  *
  * @author Hello
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "ViewServlet", urlPatterns = {"/ViewServlet"})
+public class ViewServlet extends HttpServlet {
 
-    final private String loginError = "invalid.html";
-    final private String displayServlet = "DisplayServlet";
-
+    final private String viewInfoProduct = "viewProduct.jsp";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
         PrintWriter out = response.getWriter();
         try {
-            String url = loginError;
-            String username = request.getParameter("txtUsername");
-            String password = request.getParameter("txtPassword");
-
-            password = MD5.getPasswordEncrypt(password);
+            String url = viewInfoProduct;
+            
+            String id = request.getParameter("id");
+            String name = request.getParameter("name");
+            String unitPrice = request.getParameter("price");
+            String image = request.getParameter("image");
+            String details = request.getParameter("details");
+            String categoryId = request.getParameter("categoryId");
+            String coutry = request.getParameter("country");
 
             try {
-                AccountDAO accountDAO = new AccountDAO();
-                AccountDTO accountDTO = accountDAO.checkLogin(username, password);
-
-                if (accountDTO != null) {
-                    HttpSession session = request.getSession();
-                    session.setAttribute("ACCOUNT", accountDTO);
-
-                    url = displayServlet;
-                }
-
-                RequestDispatcher rd = request.getRequestDispatcher(url);
+                HttpSession session = request.getSession();
+                
+                SizesDAO sizesDAO = new SizesDAO();
+                List<SizesDTO> listSize = sizesDAO.getListSizeByProductID(id);
+                session.setAttribute("SIZES", listSize);
+                
+                ProductDTO productDTO = new ProductDTO(id, name, Double.parseDouble(unitPrice), image, details, categoryId, coutry);
+                session.setAttribute("PRODUCT", productDTO);
+                
+                
+                CategoryDAO categoryDAO = new CategoryDAO();
+                CategoryDTO categoryDTO = categoryDAO.getCategoryByID(categoryId);
+                session.setAttribute("CATEGORY", categoryDTO);
+                
+                RequestDispatcher rd= request.getRequestDispatcher(url);
                 rd.forward(request, response);
             } catch (SQLException | NamingException e) {
-                System.out.println(e.getMessage());
                 Logger.getAnonymousLogger().log(Level.CONFIG, "msg", e);
+                System.out.println(e.getMessage());
             }
-
         } finally {
             out.close();
         }

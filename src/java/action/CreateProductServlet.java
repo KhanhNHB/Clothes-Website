@@ -43,13 +43,14 @@ public class CreateProductServlet extends HttpServlet {
             String productImage = request.getParameter("txtProductImage");
             String productDetails = request.getParameter("txtProductDetails");
             String[] productCategory = request.getParameterValues("cboCategory");
+            String country = request.getParameter("txtCountry");
 
             try {
                 CategoryDAO categoryDAO = new CategoryDAO();
                 String categoryName = categoryDAO.getCategoryIDByName(productCategory[0]);
                 
                 ProductDAO productDAO = new ProductDAO();
-                ProductDTO productDTO = new ProductDTO(productID, productName, Double.parseDouble(productPrice), productImage, productDetails, categoryName);
+                ProductDTO productDTO = new ProductDTO(productID, productName, Double.parseDouble(productPrice), productImage, productDetails, categoryName, country);
                 boolean result = productDAO.createProduct(productDTO);
 
             } catch (SQLException | NamingException e) {

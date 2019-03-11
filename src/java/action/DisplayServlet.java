@@ -34,14 +34,17 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "DisplayServlet", urlPatterns = {"/DisplayServlet"})
 public class DisplayServlet extends HttpServlet {
 
-    final private String homePage = "home.jsp";
+    final private String homeForAdmin = "homeForAdmin.jsp";
+    final private String homeForStaff = "homeForStaff.jsp";
+    final private String homeForCustomer = "homeForCustomer.jsp";
+    final private String homeForGuest = "home.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            String url = homePage;
+            String url = homeForAdmin;
             HttpSession session = request.getSession();
 
             AccountDTO accountDTO = (AccountDTO) session.getAttribute("ACCOUNT");
@@ -53,9 +56,11 @@ public class DisplayServlet extends HttpServlet {
                 session.setAttribute("CUSTOMER", customerDTO);
                 switch (accountDTO.getRole()) {
                     case 1: // admin
-
+                        break;
                     case 2: // staff
 
+                        url = homeForStaff;
+                        break;
                     case 3: // customer
                         ProductDAO productDAO = new ProductDAO();
                         List<ProductDTO> listProduct = productDAO.getListProduct();
@@ -66,6 +71,8 @@ public class DisplayServlet extends HttpServlet {
                         session.setAttribute("PRODUCTS", listProduct);
                         session.setAttribute("CATEGORYS", listCategory);
                         
+                        url = homeForCustomer;
+                        break;
                     default: // guest
 
                 }
@@ -74,6 +81,7 @@ public class DisplayServlet extends HttpServlet {
                 rd.forward(request, response);
             } catch (SQLException | NamingException e) {
                 Logger.getAnonymousLogger().log(Level.CONFIG, "msg", e);
+                System.out.println(e.getMessage());
             }
         } finally {
             out.close();

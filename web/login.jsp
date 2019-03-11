@@ -6,10 +6,10 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html  xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Login Page</title>
+            <title>Login Page</title>
     </head>
     <body>
         <form action="ProcessServlet" method="POST">
@@ -19,4 +19,10 @@
             <input type="reset" value="Reset" />
         </form>
     </body>
+    <script>
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            history.go(1);
+        };
+    </script>
 </html>

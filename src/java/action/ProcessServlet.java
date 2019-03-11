@@ -20,33 +20,42 @@ import javax.servlet.http.HttpServletResponse;
 public class ProcessServlet extends HttpServlet {
 
     final private String loginPage = "login.jsp";
+    final private String logoutServlet = "LogoutServlet";
     final private String loginServlet = "LoginServlet";
     final private String searchServlet = "SearchServlet";
     final private String viewServlet = "ViewServlet";
-    
+
     final private String createProductServlet = "Create Product Servlet";
-    
+    final private String buyServlet = "BuyServlet";
+    final private String viewCart = "viewCart.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            
+
             String button = request.getParameter("btAction");
             String url = loginPage;
-            
+
             if (button == null) {
-                
+
             } else if (button.equals("Login")) {
                 url = loginServlet;
             } else if (button.equals("Search")) {
                 url = searchServlet;
             } else if (button.equals("View")) {
-                
+                url = viewServlet;
             } else if (button.equals("Create Product")) {
                 url = createProductServlet;
+            } else if (button.equals("Buy")) {
+                url = buyServlet;
+            } else if (button.equals("View Your Cart")) {
+                url = viewCart;
+            } else if (button.equals("Logout")) {
+                url = logoutServlet;
             }
-            
+
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);
         } finally {
