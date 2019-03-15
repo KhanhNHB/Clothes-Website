@@ -21,10 +21,15 @@ public class CartObj extends HashMap<String, ProductDTO> {
         this.put(productDTO.getName(), productDTO);
     }
     
-    public void removeProductToCart(ProductDTO productDTO) {
-        if (this.containsKey(productDTO.getName())) {
-            this.remove(productDTO.getName());
+    public void removeProductToCart(String productName) {
+        if (this.containsKey(productName)) {
+            this.remove(productName);
         }
     }
 
+    public void updateProductToCart(String productName, int quantity) {
+        if (this.containsKey(productName)) {
+            this.get(productName).setQuantity(quantity);
+        }
+    }
 }

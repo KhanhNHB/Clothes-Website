@@ -66,8 +66,10 @@ public class ViewServlet extends HttpServlet {
                 
                 RequestDispatcher rd= request.getRequestDispatcher(url);
                 rd.forward(request, response);
-            } catch (SQLException | NamingException e) {
+            } catch (SQLException e) {
                 Logger.getAnonymousLogger().log(Level.CONFIG, "msg", e);
+                System.out.println(e.getMessage());
+            } catch (NamingException e) {
                 System.out.println(e.getMessage());
             }
         } finally {

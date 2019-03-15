@@ -5,68 +5,45 @@
  */
 package action;
 
+import cart.CartObj;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Hello
  */
-public class ProcessServlet extends HttpServlet {
+@WebServlet(name = "UpdateCart", urlPatterns = {"/UpdateCart"})
+public class UpdateCart extends HttpServlet {
 
-    final private String loginPage = "login.jsp";
-    final private String logoutServlet = "LogoutServlet";
-    final private String loginServlet = "LoginServlet";
-    final private String searchServlet = "SearchServlet";
-    final private String viewServlet = "ViewServlet";
-
-    final private String createProductServlet = "Create Product Servlet";
-    final private String buyServlet = "BuyServlet";
-    final private String viewCart = "viewCart.jsp";
-    final private String deleteCartServlet = "DeleteCart";
-    final private String updateCartServlet = "UpdateCart";
-    final private String paymentCartServlet = "PayCart";
-    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        
         try {
-
-            String button = request.getParameter("btAction");
-            String url = loginPage;
-
-            if (button == null) {
-
-            } else if (button.equals("Login")) {
-                url = loginServlet;
-            } else if (button.equals("Search")) {
-                url = searchServlet;
-            } else if (button.equals("View")) {
-                url = viewServlet;
-            } else if (button.equals("Create Product")) {
-                url = createProductServlet;
-            } else if (button.equals("Buy")) {
-                url = buyServlet;
-            } else if (button.equals("View Your Cart")) {
-                url = viewCart;
-            } else if (button.equals("Logout")) {
-                url = logoutServlet;
-            } else if (button.equals("DeleteCart")) {
-                url = deleteCartServlet;
-            } else if (button.equals("UpdateCart")) {
-                url = updateCartServlet;
-            } else if (button.equals("Pay")) {
-                url = paymentCartServlet;
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                CartObj cart = (CartObj)session.getAttribute("CART");
+                
+                if (cart != null) {
+                    String productName = request.getParameter("txtProductName");
+                    String[] quantity = request.getParameterValues("cboQuantity");
+                    
+                    cart.updateProductToCart(productName, Integer.parseInt(quantity[0]));
+                    
+                    session.setAttribute("CART", cart);
+                }
             }
-
-            RequestDispatcher rd = request.getRequestDispatcher(url);
-            rd.forward(request, response);
+            
+            String urlRewritting = "ProcessServlet?btAction=View Your Cart";
+            response.sendRedirect(urlRewritting);
         } finally {
             out.close();
         }

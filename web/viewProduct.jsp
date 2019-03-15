@@ -13,6 +13,9 @@
         <link rel="stylesheet" href="fontawesome-free-5.7.2-web/css/all.css"/>
         <title>Details Product Page</title>
         <style>
+            body {
+                overflow-y: hidden;
+            }
             /* ------------------- Nav ----------------- */
             .wrapper-nav {
                 position: fixed;
@@ -55,7 +58,60 @@
                 border: none;
                 background: inherit;
             }
-            /* -------------------------------------- */
+            /* ------------------------------------------------------- */
+            /* ---------------------Details Product------------------- */
+            .wrapper-product-details {
+                width: 50%;
+                margin: 100px auto;
+                line-height: 0;
+                box-shadow: 0 2px 12px #333333;
+                background: #f8f8f8;
+            }
+            .wrapper-product-image {
+                display: inline-block;
+            }
+            .wrapper-product-image img {
+                width: 387px;
+                height: 529px;
+            }
+            .wrapper-product-info {
+                width: 40%;
+                display: inline-block;
+                float: right;
+                margin-right: 10px;
+                line-height: 15px;
+            }
+            .product-info-left {
+                display: inline-block;
+            }
+            .product-info-right {
+                display: inline-block;
+                text-align: right;
+                float: right;
+            }
+            .wrapper-product-name, 
+            .wrapper-product-price, 
+            .wrapper-product-country,
+            .wrapper-product-category, 
+            .wrapper-product-size,
+            .wrapper-prouct-quantity {
+                padding: 14px;
+                border-bottom: 1px solid #dddddd;
+            }
+            .wrapper-btnBuy #btnBuy {
+                width: 98px;
+                height: 48px;
+                text-align: center;
+                background: #007be8;
+                border: none;
+                margin: 10px 0px;
+                color: #ffffff;
+                cursor: pointer;
+                transition: all .2s ease-in-out;
+            }
+            #btnBuy:hover {
+                background: #2494f7;
+            }
         </style>
     </head>
     <body>
@@ -63,7 +119,7 @@
         <c:set var="customerDTO" value="${CUSTOMER}"/>
         <c:set var="product" value="${PRODUCT}"/>
         <c:set var="listSize" value="${SIZES}"/>
-        <c:set var="categgory" value="${CATEGORY}"/>
+        <c:set var="category" value="${CATEGORY}"/>
         <c:set var="cart" value="${CART}"/>
 
         <nav class="wrapper-nav">
@@ -192,65 +248,75 @@
                             </li>
                         </ul>
                     </c:when>
-                    <c:otherwise>
-
-                    </c:otherwise>
+                    <c:otherwise></c:otherwise>
                 </c:choose>
                 </div>
             </form>
         </nav>
-                        
-        <form action="ProcessServlet" method="POST">
-            <div class="wrapper-product-details">
-                <div class="wrapper-product-image">
-                    <img src="${product.image}" alt="img"/>
+
+        <section>
+            <form action="ProcessServlet" method="POST">
+                <div class="wrapper-product-details">
+                    <div class="wrapper-product-image">
+                        <img src="${product.image}" alt="img"/>
+                    </div>
+                    <div class="wrapper-product-info">
+                        <div class="wrapper-product-name">
+                            <p class="product-info-left">Name:</p> 
+                            <p class="product-info-right">${product.name}</p>
+                        </div>
+                        <div class="wrapper-product-country">
+                            <p class="product-info-left">Country:</p> 
+                            <p class="product-info-right">${product.country}</p>
+                        </div>
+                        <div class="wrapper-product-category">
+                            <p class="product-info-left">Category:</p> 
+                            <p class="product-info-right">${category.name}</p>
+                        </div>
+                        <div class="wrapper-prouct-quantity">
+                            <p class="product-info-left">Quantity:</p> 
+                            <p class="product-info-right"><select name="cboQuantity">
+                                    <c:forEach var="counter" begin="1" end="10" step="1">
+                                        <c:if test="${counter == 1}">
+                                            <option selected="true">${counter}</option>
+                                        </c:if>
+                                        <c:if test="${counter != 1}">
+                                            <option>${counter}</option>
+                                        </c:if>
+                                    </c:forEach>
+                                </select>
+                            </p>
+                        </div>
+                        <div class="wrapper-product-price">
+                            <p class="product-info-left">Price:</p> 
+                            <p class="product-info-right">${product.unitPrice}</p>
+                        </div>
+
+                        <div class="wrapper-product-size">
+                            <p class="product-info-left">Size:</p> 
+                            <p class="product-info-right"><select name="cboSize">
+                                    <c:forEach var="sizesDTO" items="${listSize}" varStatus="counter">
+                                        <c:if test="${counter.count == 0}">
+                                            <option selected="true">${sizesDTO.sizes}</option>
+                                        </c:if>
+                                        <c:if test="${counter.count != 0}">
+                                            <option>${sizesDTO.sizes}</option>
+                                        </c:if>
+                                    </c:forEach>
+                                </select>
+                            </p>
+                        </div>
+
+                        <div class="wrapper-btnBuy">
+                            <input type="hidden" name="productId" value="${product.id}" />
+                            <input type="hidden" name="productName" value="${product.name}" />
+                            <input type="hidden" name="productImage" value="${product.image}" />
+                            <input type="hidden" name="productPrice" value="${product.unitPrice}" />
+                            <input type="submit" value="Buy" name="btAction" id="btnBuy"/>
+                        </div>
+                    </div>
                 </div>
-                <div class="wrapper-product-info">
-                    <div class="wrapper-product-name">
-                        ${product.name}
-                    </div>
-                    <div class="wrapper-product-price">
-                        ${product.unitPrice}
-                    </div>
-                    <div class="wrapper-product-country">
-                        ${product.country}
-                    </div>
-                    <div class="wrapper-product-category">
-                        ${category.name}
-                    </div>
-                    <div class="wrapper-product-size">
-                        <select name="cboSize">
-                            <c:forEach var="sizesDTO" items="${listSize}" varStatus="counter">
-                                <c:if test="${counter.count == 0}">
-                                    <option selected="true">${sizesDTO.sizes}</option>
-                                </c:if>
-                                <c:if test="${counter.count != 0}">
-                                    <option>${sizesDTO.sizes}</option>
-                                </c:if>
-                            </c:forEach>
-                        </select>
-                    </div>
-                    <div class="wrapper-prouct-quantity">
-                        <select name="cboQuantity">
-                            <c:forEach var="counter" begin="1" end="10" step="1">
-                                <c:if test="${counter == 1}">
-                                    <option selected="true">${counter}</option>
-                                </c:if>
-                                <c:if test="${counter != 1}">
-                                    <option>${counter}</option>
-                                </c:if>
-                            </c:forEach>
-                        </select>
-                    </div>
-                </div>
-                <div class="wrapper-btnBuy">
-                    <input type="hidden" name="productId" value="${product.id}" />
-                    <input type="hidden" name="productName" value="${product.name}" />
-                    <input type="hidden" name="productImage" value="${product.image}" />
-                    <input type="hidden" name="productPrice" value="${product.unitPrice}" />
-                    <input type="submit" value="Buy" name="btAction"/>
-                </div>
-            </div>
-        </form>
+            </form>
+        </section>
     </body>
 </html>

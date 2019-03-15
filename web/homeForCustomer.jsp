@@ -289,23 +289,23 @@
                             <h3>${products.get(2).unitPrice}</h3>
                         </div>
                     </div>
-                    <c:forEach begin="3" var="productDTO" items="${products}" end="${products.size()}" step="1">
+                    <c:forEach begin="3" var="index" end="${products.size() - 1}" step="1">
                         <div class="product">
                             <div class="product-image">
                                 <c:url var="viewLink" value="ProcessServlet">
                                     <c:param name="btAction" value="View"/>
-                                    <c:param name="id" value="${productDTO.id}"/>
-                                    <c:param name="name" value="${productDTO.name}"/>
-                                    <c:param name="price" value="${productDTO.unitPrice}"/>
-                                    <c:param name="image" value="${productDTO.image}"/>
-                                    <c:param name="details" value="${productDTO.details}"/>
-                                    <c:param name="categoryId" value="${productDTO.categoryId}"/>
-                                    <c:param name="country" value="${productDTO.country}" />
+                                    <c:param name="id" value="${products.get(index).id}"/>
+                                    <c:param name="name" value="${products.get(index).name}"/>
+                                    <c:param name="price" value="${products.get(index).unitPrice}"/>
+                                    <c:param name="image" value="${products.get(index).image}"/>
+                                    <c:param name="details" value="${products.get(index).details}"/>
+                                    <c:param name="categoryId" value="${products.get(index).categoryId}"/>
+                                    <c:param name="country" value="${products.get(index).country}" />
                                 </c:url>
-                                <a href="${viewLink}"><img class="lazy" data-src="${productDTO.image}" alt="img"/></a>
+                                <a href="${viewLink}"><img class="lazy" data-src="${products.get(index).image}" alt="img"/></a>
                             </div>
                             <div class="product-info">
-                                <h3>${productDTO.unitPrice}</h3>
+                                <h3>${products.get(index).unitPrice}</h3>
                             </div>
                         </div>
                     </c:forEach>

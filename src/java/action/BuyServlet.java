@@ -32,7 +32,6 @@ public class BuyServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         
         try {
-            
             HttpSession session = request.getSession();
             CartObj cart = (CartObj) session.getAttribute("CART");
             
@@ -47,7 +46,9 @@ public class BuyServlet extends HttpServlet {
             String[] size = request.getParameterValues("cboSize");
             String[] quantity = request.getParameterValues("cboQuantity");
 
-            ProductDTO productDTO = new ProductDTO(productId, productName, Double.parseDouble(productPrice), productImage, "", "", "", Integer.parseInt(quantity[0]), size[0]);
+            ProductDTO productDTO = new ProductDTO(productId, productName, 
+                    Double.parseDouble(productPrice), productImage, 
+                    "", "", "", Integer.parseInt(quantity[0]), size[0]);
             cart.addProductToCart(productDTO);
             
             session.setAttribute("CART", cart);
