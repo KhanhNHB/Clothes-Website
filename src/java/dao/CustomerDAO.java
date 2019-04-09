@@ -44,7 +44,7 @@ public class CustomerDAO implements Serializable {
             con = DBUtils.getConnection();
 
             if (con != null) {
-                String sql = "SELECT id, firstName, lastName, middleName, address, phone, cusLevel, sex, avatar FROM dbo.Customer";
+                String sql = "EXEC USP_LoadListCustomer";
                 ps = con.prepareStatement(sql);
 
                 rs = ps.executeQuery();
@@ -73,100 +73,100 @@ public class CustomerDAO implements Serializable {
         }
     }
 
-    public List<CustomerDTO> searchCustomer(String searchValue, int option) throws SQLException, NamingException {
-        try {
-            con = DBUtils.getConnection();
-
-            if (con != null) {
-                String sql = "";
-                if (option == 0) { // search first name
-                    sql = "Select id, firstName, lastName, middleName, address, phone, cusLevel, sex, avatar "
-                            + "From dbo.Customer Where firstName LIKE ?";
-
-                    ps = con.prepareStatement(sql);
-                    ps.setString(1, "%" + searchValue + "%");
-
-                    rs = ps.executeQuery();
-
-                    while (rs.next()) {
-                        String id = rs.getString("id");
-                        String firstName = rs.getString("firstName");
-                        String lastName = rs.getString("lastName");
-                        String middleName = rs.getString("middleName");
-                        String address = rs.getString("address");
-                        String phone = rs.getString("phone");
-                        int cusLevel = rs.getInt("cusLevel");
-                        boolean sex = rs.getBoolean("sex");
-                        String avatar = rs.getString("avatar");
-
-                        if (this.customers == null) {
-                            customers = new ArrayList();
-                        }
-
-                        CustomerDTO customerDTO = new CustomerDTO(id, firstName, lastName, middleName, address, phone, sex, avatar, cusLevel);
-                        this.customers.add(customerDTO);
-                    }
-                } else if (option == 1) { // search address
-                    sql = "Select id, firstName, lastName, middleName, address, phone, cusLevel, sex, avatar "
-                            + "From dbo.Customer Where address LIKE ?";
-
-                    ps = con.prepareStatement(sql);
-                    ps.setString(1, "%" + searchValue + "%");
-
-                    rs = ps.executeQuery();
-
-                    while (rs.next()) {
-                        String id = rs.getString("id");
-                        String firstName = rs.getString("firstName");
-                        String lastName = rs.getString("lastName");
-                        String middleName = rs.getString("middleName");
-                        String address = rs.getString("address");
-                        String phone = rs.getString("phone");
-                        int cusLevel = rs.getInt("cusLevel");
-                        boolean sex = rs.getBoolean("sex");
-                        String avatar = rs.getString("avatar");
-
-                        if (this.customers == null) {
-                            customers = new ArrayList();
-                        }
-
-                        CustomerDTO customerDTO = new CustomerDTO(id, firstName, lastName, middleName, address, phone, sex, avatar, cusLevel);
-                        this.customers.add(customerDTO);
-                    }
-                } else if (option == 2) { // search phone
-                    sql = "Select id, firstName, lastName, middleName, address, phone, cusLevel, sex, avatar "
-                            + "From dbo.Customer Where phone LIKE ?";
-
-                    ps = con.prepareStatement(sql);
-                    ps.setString(1, "%" + searchValue + "%");
-
-                    rs = ps.executeQuery();
-
-                    while (rs.next()) {
-                        String id = rs.getString("id");
-                        String firstName = rs.getString("firstName");
-                        String lastName = rs.getString("lastName");
-                        String middleName = rs.getString("middleName");
-                        String address = rs.getString("address");
-                        String phone = rs.getString("phone");
-                        int cusLevel = rs.getInt("cusLevel");
-                        boolean sex = rs.getBoolean("sex");
-                        String avatar = rs.getString("avatar");
-
-                        if (this.customers == null) {
-                            customers = new ArrayList();
-                        }
-
-                        CustomerDTO customerDTO = new CustomerDTO(id, firstName, lastName, middleName, address, phone, sex, avatar, cusLevel);
-                        this.customers.add(customerDTO);
-                    }
-                }
-            }
-        } finally {
-            closeConnection();
-        }
-        return this.customers;
-    }
+//    public List<CustomerDTO> searchCustomer(String searchValue, int option) throws SQLException, NamingException {
+//        try {
+//            con = DBUtils.getConnection();
+//
+//            if (con != null) {
+//                String sql = "";
+//                if (option == 0) { // search first name
+//                    sql = "Select id, firstName, lastName, middleName, address, phone, cusLevel, sex, avatar "
+//                            + "From dbo.Customer Where firstName LIKE ?";
+//
+//                    ps = con.prepareStatement(sql);
+//                    ps.setString(1, "%" + searchValue + "%");
+//
+//                    rs = ps.executeQuery();
+//
+//                    while (rs.next()) {
+//                        String id = rs.getString("id");
+//                        String firstName = rs.getString("firstName");
+//                        String lastName = rs.getString("lastName");
+//                        String middleName = rs.getString("middleName");
+//                        String address = rs.getString("address");
+//                        String phone = rs.getString("phone");
+//                        int cusLevel = rs.getInt("cusLevel");
+//                        boolean sex = rs.getBoolean("sex");
+//                        String avatar = rs.getString("avatar");
+//
+//                        if (this.customers == null) {
+//                            customers = new ArrayList();
+//                        }
+//
+//                        CustomerDTO customerDTO = new CustomerDTO(id, firstName, lastName, middleName, address, phone, sex, avatar, cusLevel);
+//                        this.customers.add(customerDTO);
+//                    }
+//                } else if (option == 1) { // search address
+//                    sql = "Select id, firstName, lastName, middleName, address, phone, cusLevel, sex, avatar "
+//                            + "From dbo.Customer Where address LIKE ?";
+//
+//                    ps = con.prepareStatement(sql);
+//                    ps.setString(1, "%" + searchValue + "%");
+//
+//                    rs = ps.executeQuery();
+//
+//                    while (rs.next()) {
+//                        String id = rs.getString("id");
+//                        String firstName = rs.getString("firstName");
+//                        String lastName = rs.getString("lastName");
+//                        String middleName = rs.getString("middleName");
+//                        String address = rs.getString("address");
+//                        String phone = rs.getString("phone");
+//                        int cusLevel = rs.getInt("cusLevel");
+//                        boolean sex = rs.getBoolean("sex");
+//                        String avatar = rs.getString("avatar");
+//
+//                        if (this.customers == null) {
+//                            customers = new ArrayList();
+//                        }
+//
+//                        CustomerDTO customerDTO = new CustomerDTO(id, firstName, lastName, middleName, address, phone, sex, avatar, cusLevel);
+//                        this.customers.add(customerDTO);
+//                    }
+//                } else if (option == 2) { // search phone
+//                    sql = "Select id, firstName, lastName, middleName, address, phone, cusLevel, sex, avatar "
+//                            + "From dbo.Customer Where phone LIKE ?";
+//
+//                    ps = con.prepareStatement(sql);
+//                    ps.setString(1, "%" + searchValue + "%");
+//
+//                    rs = ps.executeQuery();
+//
+//                    while (rs.next()) {
+//                        String id = rs.getString("id");
+//                        String firstName = rs.getString("firstName");
+//                        String lastName = rs.getString("lastName");
+//                        String middleName = rs.getString("middleName");
+//                        String address = rs.getString("address");
+//                        String phone = rs.getString("phone");
+//                        int cusLevel = rs.getInt("cusLevel");
+//                        boolean sex = rs.getBoolean("sex");
+//                        String avatar = rs.getString("avatar");
+//
+//                        if (this.customers == null) {
+//                            customers = new ArrayList();
+//                        }
+//
+//                        CustomerDTO customerDTO = new CustomerDTO(id, firstName, lastName, middleName, address, phone, sex, avatar, cusLevel);
+//                        this.customers.add(customerDTO);
+//                    }
+//                }
+//            }
+//        } finally {
+//            closeConnection();
+//        }
+//        return this.customers;
+//    }
 
     public CustomerDTO getCustomer(String idCustomer) throws SQLException, NamingException {
         CustomerDTO customerDTO = null;
@@ -210,7 +210,7 @@ public class CustomerDAO implements Serializable {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "Delete Customer Where id = ?";
+                String sql = "EXEC USP_DeleteCustomer ?";
                 ps = con.prepareStatement(sql);
                 ps.setString(1, id);
 

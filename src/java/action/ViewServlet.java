@@ -33,14 +33,14 @@ import javax.servlet.http.HttpSession;
 public class ViewServlet extends HttpServlet {
 
     final private String viewInfoProduct = "viewProduct.jsp";
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException, NamingException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
             String url = viewInfoProduct;
-            
+
             String id = request.getParameter("id");
             String name = request.getParameter("name");
             String unitPrice = request.getParameter("price");
@@ -49,29 +49,24 @@ public class ViewServlet extends HttpServlet {
             String categoryId = request.getParameter("categoryId");
             String coutry = request.getParameter("country");
 
-            try {
-                HttpSession session = request.getSession();
-                
-                SizesDAO sizesDAO = new SizesDAO();
-                List<SizesDTO> listSize = sizesDAO.getListSizeByProductID(id);
-                session.setAttribute("SIZES", listSize);
-                
-                ProductDTO productDTO = new ProductDTO(id, name, Double.parseDouble(unitPrice), image, details, categoryId, coutry);
-                session.setAttribute("PRODUCT", productDTO);
-                
-                
-                CategoryDAO categoryDAO = new CategoryDAO();
-                CategoryDTO categoryDTO = categoryDAO.getCategoryByID(categoryId);
-                session.setAttribute("CATEGORY", categoryDTO);
-                
-                RequestDispatcher rd= request.getRequestDispatcher(url);
-                rd.forward(request, response);
-            } catch (SQLException e) {
-                Logger.getAnonymousLogger().log(Level.CONFIG, "msg", e);
-                System.out.println(e.getMessage());
-            } catch (NamingException e) {
-                System.out.println(e.getMessage());
-            }
+            HttpSession session = request.getSession();
+
+            SizesDAO sizesDAO = new SizesDAO();
+            List<SizesDTO> listSize = sizesDAO.getListSizeByProductID(id);
+            session.setAttribute("SIZES", listSize);
+
+            ProductDTO productDTO = new ProductDTO(id, name, 
+                    Double.parseDouble(unitPrice), image, details, 
+                    categoryId, coutry);
+            session.setAttribute("PRODUCT", productDTO);
+
+            CategoryDAO categoryDAO = new CategoryDAO();
+            CategoryDTO categoryDTO = categoryDAO.getCategoryByID(categoryId);
+            session.setAttribute("CATEGORY", categoryDTO);
+
+            RequestDispatcher rd = request.getRequestDispatcher(url);
+            rd.forward(request, response);
+
         } finally {
             out.close();
         }
@@ -89,7 +84,11 @@ public class ViewServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException | NamingException ex) {
+            Logger.getLogger(ViewServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -103,7 +102,11 @@ public class ViewServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException | NamingException ex) {
+            Logger.getLogger(ViewServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

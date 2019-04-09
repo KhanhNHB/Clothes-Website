@@ -15,6 +15,7 @@ import dto.ProductDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,7 +41,7 @@ public class DisplayServlet extends HttpServlet {
     final private String homeForGuest = "home.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException, NamingException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
@@ -49,40 +50,111 @@ public class DisplayServlet extends HttpServlet {
 
             AccountDTO accountDTO = (AccountDTO) session.getAttribute("ACCOUNT");
 
-            try {
-                CustomerDAO customerDAO = new CustomerDAO();
-                CustomerDTO customerDTO = customerDAO.getCustomer(accountDTO.getUsername());
+            CustomerDAO customerDAO = new CustomerDAO();
+            CustomerDTO customerDTO = customerDAO.getCustomer(accountDTO.getUsername());
+            session.setAttribute("CUSTOMER", customerDTO);
 
-                session.setAttribute("CUSTOMER", customerDTO);
-                switch (accountDTO.getRole()) {
-                    case 1: // admin
-                        break;
-                    case 2: // staff
+            ProductDAO productDAO = new ProductDAO();
+            CategoryDAO categoryDAO = new CategoryDAO();
 
-                        url = homeForStaff;
-                        break;
-                    case 3: // customer
-                        ProductDAO productDAO = new ProductDAO();
-                        List<ProductDTO> listProduct = productDAO.getListProduct();
+            List<ProductDTO> listProduct;
+            List<CategoryDTO> listCategory;
 
-                        CategoryDAO categoryDAO = new CategoryDAO();
-                        List<CategoryDTO> listCategory = categoryDAO.getListCategory();
+            switch (accountDTO.getRole()) {
+                case 1: // admin
+                    break;
+                case 2: // staff
+                    int first = 0;
+                    int last = 4;
+                    int pages = 1;
 
-                        session.setAttribute("PRODUCTS", listProduct);
-                        session.setAttribute("CATEGORYS", listCategory);
+                    // Get number of project in db
+                    int totalProduct = productDAO.getCountProductsTotal();
+
+                    if (totalProduct <= 5) {
+                        last = totalProduct;
+                    } else {
+                        pages = totalProduct / 4;
+                        if (totalProduct % 4 > 0) {
+                            pages++;
+                        }
+                    }
+
+                    // Get current button 
+                    List<Integer> currentButton = (List<Integer>) session.getAttribute("CURRENTBUTTON");
+                    // Get current page number
+                    int currButton = 1; 
+                    if (currentButton != null) {
+                        currButton = currentButton.get(0);
+                        if (currButton == 1) {
+                            first = 0;
+                        } else {
+                            last = (currButton - 1) * 4;
+                            first = last;
+                        }
+                        last = 4;
+                    }
+
+                    listProduct = productDAO.getListProductFromTo(first, last);
+                    session.setAttribute("PRODUCTS", listProduct);
+
+                    // Add number of button page at listPageTemp
+                    List<Integer> listPageTemp = new ArrayList<>();
+                    for (int i = 0; i < pages; i++) {
+                        listPageTemp.add(i + 1);
+                    }
+
+                    // Check if number of pages greater 5
+                    // just show 5 button pages
+                    List<Integer> listPage = new ArrayList<>();
+                    if (listPageTemp.size() > 5) {
+                        int currPos = 0;
+                        int start = 0;
+                        // Middle button
+                        final int middle = 5 / 2;
+                        int end = last;
                         
-                        url = homeForCustomer;
-                        break;
-                    default: // guest
+                        if (currButton != 0) {
+                            // Get position current button by value subtraction 1
+                            currPos = currButton - 1;
+                        }
 
-                }
+                        if (currPos > middle) {
+                            start = currPos - middle;
+                            end = currPos + 2;
+                            if (end >= listPageTemp.size()) {
+                                end = listPageTemp.size() - 1;
+                            }
+                        }
 
-                RequestDispatcher rd = request.getRequestDispatcher(url);
-                rd.forward(request, response);
-            } catch (SQLException | NamingException e) {
-                Logger.getAnonymousLogger().log(Level.CONFIG, "msg", e);
-                System.out.println(e.getMessage());
+                        for (int i = start; i <= end; i++) {
+                            listPage.add(listPageTemp.get(i));
+                        }
+                        session.setAttribute("PAGES", listPage);
+                    } else {
+                        session.setAttribute("PAGES", listPageTemp);
+                    }
+
+                    listCategory = categoryDAO.getListCategory();
+                    session.setAttribute("CATEGORYS", listCategory);
+
+                    url = homeForStaff;
+                    break;
+                case 3: // customer
+                    listProduct = productDAO.getListProduct();
+                    listCategory = categoryDAO.getListCategory();
+
+                    session.setAttribute("PRODUCTS", listProduct);
+                    session.setAttribute("CATEGORYS", listCategory);
+
+                    url = homeForCustomer;
+                    break;
+                default: // guest
             }
+
+            RequestDispatcher rd = request.getRequestDispatcher(url);
+            rd.forward(request, response);
+
         } finally {
             out.close();
         }
@@ -100,7 +172,11 @@ public class DisplayServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException | NamingException ex) {
+            Logger.getLogger(DisplayServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -114,7 +190,11 @@ public class DisplayServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException | NamingException ex) {
+            Logger.getLogger(DisplayServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

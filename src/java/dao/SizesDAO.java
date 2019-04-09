@@ -43,6 +43,34 @@ public class SizesDAO {
         return sizes;
     }
 
+    public List<SizesDTO> getListSize() throws NamingException, SQLException {
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "EXEC USP_GetListSize";
+
+                ps = con.prepareStatement(sql);
+
+                rs = ps.executeQuery();
+
+                while (rs.next()) {
+                    String id = rs.getString("id");
+                    String size = rs.getString("sizes");
+                    int quantity = rs.getInt("quantity");
+
+                    if (this.sizes == null) {
+                        this.sizes = new ArrayList<>();
+                    }
+                    SizesDTO sizesDTO = new SizesDTO(id, size, quantity);
+                    this.sizes.add(sizesDTO);
+                }
+            }
+        } finally {
+            closeConnection();
+        }
+        return this.sizes;
+    }
+
     public List<SizesDTO> getListSizeByProductID(String productID) throws SQLException, NamingException {
         try {
             con = DBUtils.getConnection();
@@ -59,7 +87,7 @@ public class SizesDAO {
                     String id = rs.getString("id");
                     String size = rs.getString("sizes");
                     int quantity = rs.getInt("quantity");
-                    
+
                     if (this.sizes == null) {
                         this.sizes = new ArrayList<>();
                     }

@@ -72,7 +72,7 @@ public class AccountDAO implements Serializable {
             con = DBUtils.getConnection();
 
             if (con != null) {
-                String sql = "select username, password, role from Account";
+                String sql = "EXEC USP_LoadListAccount";
 
                 ps = con.prepareStatement(sql);
                 rs = ps.executeQuery();
@@ -99,7 +99,7 @@ public class AccountDAO implements Serializable {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "select username, password, role from Account WHERE username LIKE ?";
+                String sql = "EXEC USP_SearchAccountByUsername ?";
 
                 ps = con.prepareStatement(sql);
                 ps.setString(1, "%" + searchValue + "%");
@@ -130,7 +130,7 @@ public class AccountDAO implements Serializable {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "delete account where username = ?";
+                String sql = "EXEC USP_DeleteAccount ? ";
                 ps = con.prepareStatement(sql);
                 ps.setString(1, username);
 
@@ -151,7 +151,7 @@ public class AccountDAO implements Serializable {
             con = DBUtils.getConnection();
 
             if (con != null) {
-                String sql = "Select username, password, role From Account Where username = ?";
+                String sql = "EXEC USP_GetAccountById ?";
                 ps = con.prepareStatement(sql);
                 ps.setString(1, pk);
 
@@ -174,5 +174,28 @@ public class AccountDAO implements Serializable {
             closeConnection();
         }
         return accountDTO;
+    }
+    
+    public boolean addAccount(AccountDTO accountDTO) throws SQLException, NamingException {
+        try {
+            con = DBUtils.getConnection();
+            if (con != null) {
+                String sql = "Insert into Account(username, password, role) values(?, ?, ?)";
+                ps = con.prepareStatement(sql);
+                
+                ps.setString(1, accountDTO.getUsername());
+                ps.setString(2, md5.MD5.getPasswordEncrypt(accountDTO.getPassword()));
+                ps.setInt(3, accountDTO.getRole());
+                
+                int row = ps.executeUpdate();
+                
+                if (row > 0) {
+                    return true;
+                }
+            }
+        } finally {
+            closeConnection();
+        }
+        return false;
     }
 }

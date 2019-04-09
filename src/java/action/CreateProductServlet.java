@@ -31,7 +31,7 @@ public class CreateProductServlet extends HttpServlet {
     final private String displayServlet = "DisplayServlet";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException, NamingException {
         response.setContentType("text/html;charset=UTF-8");
 
         PrintWriter out = response.getWriter();
@@ -45,19 +45,15 @@ public class CreateProductServlet extends HttpServlet {
             String[] productCategory = request.getParameterValues("cboCategory");
             String country = request.getParameter("txtCountry");
 
-            try {
-                CategoryDAO categoryDAO = new CategoryDAO();
-                String categoryName = categoryDAO.getCategoryIDByName(productCategory[0]);
-                
-                ProductDAO productDAO = new ProductDAO();
-                ProductDTO productDTO = new ProductDTO(productID, productName, Double.parseDouble(productPrice), productImage, productDetails, categoryName, country);
-                boolean result = productDAO.createProduct(productDTO);
+            CategoryDAO categoryDAO = new CategoryDAO();
+            String categoryName = categoryDAO.getCategoryIDByName(productCategory[0]);
 
-            } catch (SQLException | NamingException e) {
-                 Logger.getAnonymousLogger().log(Level.CONFIG, "msg", e);
-            }
+            ProductDAO productDAO = new ProductDAO();
+            ProductDTO productDTO = new ProductDTO(productID, productName, Double.parseDouble(productPrice), productImage, productDetails, categoryName, country, true);
+            
+            productDAO.createProduct(productDTO);
 
-            RequestDispatcher rd= request.getRequestDispatcher(url);
+            RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);
         } finally {
             out.close();
@@ -76,7 +72,11 @@ public class CreateProductServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException | NamingException ex) {
+            Logger.getLogger(CreateProductServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -90,7 +90,11 @@ public class CreateProductServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException | NamingException ex) {
+            Logger.getLogger(CreateProductServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

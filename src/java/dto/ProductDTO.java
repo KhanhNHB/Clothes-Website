@@ -12,6 +12,7 @@ import java.io.Serializable;
  * @author Hello
  */
 public class ProductDTO implements Serializable {
+
     private String id;
     private String name;
     private double unitPrice;
@@ -21,11 +22,13 @@ public class ProductDTO implements Serializable {
     private String country;
     private int quantity;
     private String size;
+    private boolean status;
 
     public ProductDTO() {
     }
 
-    public ProductDTO(String id, String name, double unitPrice, String image, String details, String categoryId, String country) {
+    public ProductDTO(String id, String name, double unitPrice, String image,
+            String details, String categoryId, String country) {
         this.id = id;
         this.name = name;
         this.unitPrice = unitPrice;
@@ -35,7 +38,21 @@ public class ProductDTO implements Serializable {
         this.country = country;
     }
 
-    public ProductDTO(String id, String name, double unitPrice, String image, String details, String categoryId, String country, int quantity, String size) {
+    public ProductDTO(String id, String name, double unitPrice, String image,
+            String details, String categoryId, String country, boolean status) {
+        this.id = id;
+        this.name = name;
+        this.unitPrice = unitPrice;
+        this.image = image;
+        this.details = details;
+        this.categoryId = categoryId;
+        this.country = country;
+        this.status = status;
+    }
+
+    // Constructor for cart
+    public ProductDTO(String id, String name, double unitPrice, String image,
+            String details, String categoryId, String country, int quantity, String size) {
         this.id = id;
         this.name = name;
         this.unitPrice = unitPrice;
@@ -172,9 +189,23 @@ public class ProductDTO implements Serializable {
     public void setSize(String size) {
         this.size = size;
     }
- 
+
     public double totalPrice() {
         return this.quantity * this.unitPrice;
     }
-    
+
+    /**
+     * @return the status
+     */
+    public boolean isStatus() {
+        return status;
+    }
+
+    /**
+     * @param status the status to set
+     */
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
 }

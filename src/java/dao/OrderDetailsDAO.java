@@ -39,8 +39,7 @@ public class OrderDetailsDAO {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "Insert into OrderDetails(productID, quantity, unitPrice, total, orderID) "
-                        + "values(?, ?, ?, ?, ?)";
+                String sql = "EXEC USP_AddOrderDetails ?, ?, ?, ?, ?";
                 
                 ps = con.prepareStatement(sql);
                 

@@ -29,11 +29,11 @@ import md5.MD5;
 @WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
 public class LoginServlet extends HttpServlet {
 
-    final private String loginError = "invalid.html";
+    final private String loginError = "login.jsp";
     final private String displayServlet = "DisplayServlet";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, NamingException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
 
         PrintWriter out = response.getWriter();
@@ -44,24 +44,19 @@ public class LoginServlet extends HttpServlet {
 
             password = MD5.getPasswordEncrypt(password);
 
-            try {
                 AccountDAO accountDAO = new AccountDAO();
                 AccountDTO accountDTO = accountDAO.checkLogin(username, password);
 
+                HttpSession session = request.getSession();
                 if (accountDTO != null) {
-                    HttpSession session = request.getSession();
                     session.setAttribute("ACCOUNT", accountDTO);
-
-                    url = displayServlet;
+                     url = displayServlet;
+                } else {
+                    session.setAttribute("LOGINFAIL", "Invalid username or password!");
                 }
-
+                   
                 RequestDispatcher rd = request.getRequestDispatcher(url);
                 rd.forward(request, response);
-            } catch (SQLException | NamingException e) {
-                System.out.println(e.getMessage());
-                Logger.getAnonymousLogger().log(Level.CONFIG, "msg", e);
-            }
-
         } finally {
             out.close();
         }
@@ -79,7 +74,11 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (NamingException | SQLException ex) {
+            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -93,7 +92,11 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (NamingException | SQLException ex) {
+            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

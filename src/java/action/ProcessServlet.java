@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 public class ProcessServlet extends HttpServlet {
 
     final private String loginPage = "login.jsp";
+    final private String displayServlet = "DisplayServlet";
     final private String logoutServlet = "LogoutServlet";
     final private String loginServlet = "LoginServlet";
     final private String searchServlet = "SearchServlet";
@@ -27,10 +28,14 @@ public class ProcessServlet extends HttpServlet {
 
     final private String createProductServlet = "Create Product Servlet";
     final private String buyServlet = "BuyServlet";
-    final private String viewCart = "viewCart.jsp";
+    final private String viewCartServlet = "viewCart.jsp";
     final private String deleteCartServlet = "DeleteCart";
     final private String updateCartServlet = "UpdateCart";
     final private String paymentCartServlet = "PayCart";
+    
+    final private String deleteProductServlet = "DeleteProduct";
+    final private String updateProductServlet = "UpdateProduct";
+    final private String registrationServlet = "RegistrationAccountServlet";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -45,6 +50,8 @@ public class ProcessServlet extends HttpServlet {
 
             } else if (button.equals("Login")) {
                 url = loginServlet;
+            } else if (button.equals("Home")) {
+                url = displayServlet;
             } else if (button.equals("Search")) {
                 url = searchServlet;
             } else if (button.equals("View")) {
@@ -54,7 +61,7 @@ public class ProcessServlet extends HttpServlet {
             } else if (button.equals("Buy")) {
                 url = buyServlet;
             } else if (button.equals("View Your Cart")) {
-                url = viewCart;
+                url = viewCartServlet;
             } else if (button.equals("Logout")) {
                 url = logoutServlet;
             } else if (button.equals("DeleteCart")) {
@@ -63,6 +70,12 @@ public class ProcessServlet extends HttpServlet {
                 url = updateCartServlet;
             } else if (button.equals("Pay")) {
                 url = paymentCartServlet;
+            } else if (button.equals("DeleteProduct")) {
+                url = deleteProductServlet;
+            } else if (button.equals("UpdateProduct")) {
+                url = updateProductServlet;
+            } else if (button.equals("Register")) {
+                url = registrationServlet;
             }
 
             RequestDispatcher rd = request.getRequestDispatcher(url);

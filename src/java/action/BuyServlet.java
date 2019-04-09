@@ -9,7 +9,6 @@ import cart.CartObj;
 import dto.ProductDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -52,9 +51,8 @@ public class BuyServlet extends HttpServlet {
             cart.addProductToCart(productDTO);
             
             session.setAttribute("CART", cart);
-                
-            RequestDispatcher rd = request.getRequestDispatcher(viewProduct);
-            rd.forward(request, response);
+
+            response.sendRedirect(viewProduct);
         } finally {
             out.close();
         }

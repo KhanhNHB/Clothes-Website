@@ -23,7 +23,7 @@
                 left: 0;
                 width: 100%;
                 height: 50px;
-                background-color: #007be8;
+                background-color: #444753;
                 box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
                 display: block;
                 z-index: 999;
@@ -36,17 +36,38 @@
                 display: inline-block;
                 float: left;
             }
-            .wrapper-nav ul li a {
+            .wrapper-nav ul li a,
+            .wrapper-nav ul li button {
                 text-decoration: none;
                 text-align: center;
                 font-size: 14px;
                 font-family: arial;
+                background: transparent;
+                border: none;
                 color: #ffffff;
                 padding: 0 20px;
-                transition: all .25s ease;
+                cursor: pointer;
+                margin: 0 10px;
+                outline: none;
+                position: relative;
             }
-            .wrapper-nav ul li a:hover {
-                color: #3395ed;
+            .wrapper-nav ul li a:after,
+            .wrapper-nav ul li button:after {
+                display: block;
+                content: "";
+                width: 00%;
+                height: 2px;
+                background: #dfb400;
+                transition: all 0.2s;
+                position: absolute;
+                transform: translateX(50%);
+                right: 50%;
+            }
+            .wrapper-nav ul li a:hover:after, 
+            .wrapper-nav ul li button:hover:after {
+                opacity: 1;
+                background: #dfb400;
+                width: 100%;
             }
             .wrapper-nav .wrapper-welcome {
                 margin-right: 60px;
@@ -85,11 +106,10 @@
             }
             section table tbody tr td {
                 display: table-cell;
-                border-bottom: 1px solid #dddddd;
+                border-top: 1px solid #dddddd;
             }
             section table tbody tr td div {
                 padding: 15px;
-
             }
             section table tbody tr td img {
                 width: 70px;
@@ -142,8 +162,12 @@
                 right: 64.6%;
                 bottom: -50px;
             }
-            a:link, a:visited {
+            a:link, a:visited,
+            button:link, button:visited {
                 color: #007be8;
+            }
+            button {
+                outline: none;
             }
             #wrapper-note-list-empty {
                 margin: 0 auto;
@@ -166,98 +190,33 @@
                 <c:choose>
                     <c:when test="${accountDTO.role == 1}"> 
                         <ul>
-                            <li> <a href="">Home</a>
-                            </li>
-                            <li>
-                                <a href="#">Product</a>
-                            </li>
-                            <li>
-                                <a href="#">Contact</a>
-                            </li>
-                            <li>
-                                <a href="#">About</a>
-                            </li>
+
                         </ul>
                         <ul class="wrapper-welcome">
-                            <li>
-                                <c:url var="viewYourCart" value="ProcessServlet">
-                                    <c:param name="btAction" value="View Your Cart"/>
-                                </c:url>       
-                                <a href="${viewYourCart}">
-                                    <i class="fas fa-shopping-cart"></i>
-                                </a>
 
-                                <c:if test="${not empty cart}">
-                                    ${cart.size()}
-                                </c:if>
-                                <c:if test="${empty cart}">
-                                    0
-                                </c:if>
-                            </li>
-                            <li>
-                                <c:url var="logoutLink" value="ProcessServlet">
-                                    <c:param name="btAction" value="Logout"/>
-                                </c:url>
-                                <a href="${logoutLink}" id="btLogout">Log out</a>
-                            </li>
-                            <li>
-                                <a href="#" alt="img">${customerDTO.lastName} ${customerDTO.middleName} ${customerDTO.firstName}</a>
-                            </li>
                         </ul>
                     </c:when>
                     <c:when test="${accountDTO.role == 2}"> 
                         <ul>
-                            <li> <a href="">Home</a>
-                            </li>
-                            <li>
-                                <a href="#">Product</a>
-                            </li>
-                            <li>
-                                <a href="#">Contact</a>
-                            </li>
-                            <li>
-                                <a href="#">About</a>
-                            </li>
+
                         </ul>
                         <ul class="wrapper-welcome">
-                            <li>
-                                <c:url var="viewYourCart" value="ProcessServlet">
-                                    <c:param name="btAction" value="View Your Cart"/>
-                                </c:url>       
-                                <a href="${viewYourCart}">
-                                    <i class="fas fa-shopping-cart"></i>
-                                </a>
 
-                                <c:if test="${not empty cart}">
-                                    ${cart.size()}
-                                </c:if>
-                                <c:if test="${empty cart}">
-                                    0
-                                </c:if>
-                            </li>
-                            <li>
-                                <c:url var="logoutLink" value="ProcessServlet">
-                                    <c:param name="btAction" value="Logout"/>
-                                </c:url>
-                                <a href="${logoutLink}" id="btLogout">Log out</a>
-                            </li>
-                            <li>
-                                <a href="#" alt="img">${customerDTO.lastName} ${customerDTO.middleName} ${customerDTO.firstName}</a>
-                            </li>
                         </ul>
                     </c:when>
                     <c:when test="${accountDTO.role == 3}"> 
                         <ul>
-                            <li> <a href="homeForCustomer.jsp">Home</a>
+                            <li>
+                                <button type="submit" name="btAction" value="Home">Home</button>
                             </li>
                             <li>
-                                <a href="#">Product</a>
+                                <button type="submit" name="btAction" value="Home">Product</button>
                             </li>
                             <li>
-                                <a href="#">Contact</a>
+                                <button type="submit" name="btAction" value="Home">Contact</button>
                             </li>
                             <li>
-                                <a href="#">About</a>
+                                <button type="submit" name="btAction" value="Home">About</button>
                             </li>
                         </ul>
                         <ul class="wrapper-welcome">

@@ -40,7 +40,7 @@ public class OrdersDAO {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "Select MAX(id) as maxID From Orders";
+                String sql = "EXEC USP_GetMaxIdOrderTable";
                 ps = con.prepareStatement(sql);
                 rs = ps.executeQuery();
 

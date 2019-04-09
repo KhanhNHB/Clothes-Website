@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<!-- developer.mozilla.org -->
+<!-- https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Background_and_Borders/Border-radius_generator -->
+<!-- caniuse.com -->
+<html>
+
+<head>
+    <title>Contact Me</title>
+    <meta charset="utf-8" />
+    <!-- Đưa định dạng về UTF-8 -->
+    <meta name="keywords" content="web, design front end, back end, Java, software" />
+    <!-- Cho Google từ khóa để tìm -->
+
+    <!-- Font của google phải để trước CSS mới nhìn thấy được -->
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700" rel="stylesheet" />
+
+    <!-- EXTERNAL CSS -->
+    <link rel="stylesheet" href="./css/contact.css" />
+
+    <!-- CSS Icon phía dưới footer -->
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.css" />
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li>
+                    <a href="./index.html">Home</a>
+                </li>
+                <li>
+                    <a href="./project.html">Project</a>
+                </li>
+                <li>
+                    <a href="./project.html">My Experience</a>
+                </li>
+                <li>
+                    <span class="link_button">Contact Me</span>
+                </li>
+            </ul>
+        </nav>
+        <span id="hamburger">
+            <i class="fa fa-bars" aria-hidden="true"></i>
+        </span>
+        <span id="cross">
+            <i class="fa fa-times" aria-hidden="true"></i>
+        </span>
+
+        <div class="menu_wrapper">
+            <nav>
+                <ul>
+                    <li>
+                        <a href="./project.html">Home</a>
+                        <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                    </li>
+                    <li>
+                        <a href="./project.html">Project</a>
+                        <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                    </li>
+                    <li>
+                        <a href="./experience.html">My Experience</a>
+                        <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                    </li>
+                    <li>
+                        <span class="link_button">Contact Me</span>
+                        <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                    </li>
+                </ul>
+            </nav>
+            <div class="social_link">
+                <ul>
+                    <li>
+                        <i class="fa fa-share-alt" aria-hidden="true"></i>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-facebook" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-twitter" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-whatsapp" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-weixin" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-envelope fa-1x" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="search">
+                <a href="#">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </a>
+                <form action="/" autocomplete="off">
+                    <input required type="text" placeholder="Search" />
+                </form>
+            </div>
+        </div>
+        <h1>My experience</h1>
+        <h2>Check out my education too</h2>
+    </header>
+    <section id="contact_wrapper">
+        <section id="contact_form">
+            <form action="/" autocomplete="off">
+                <!-- <form>: dùng gửi về BackEnd, autocomplete: dùng để sổ gợi ý nhập -->
+                <fieldset id="basic_info">
+                    <legend><span class="number">1</span>Basic Info</legend>
+                    <!-- <legend>: Tạo cái border vào tiêu đề -->
+                    <label for="name">Your name:</label>
+                    <!-- for: này dùng để nếu người dùng bấm vào label thì con trỏ nhày tới cái id của input nào có cùng tên -->
+                    <input required type="text" id="name" placeholder="Input your name" maxlength="30" />
+                    <!-- maxlenght: là tối đa nhạp vào 30 ký tự -->
+                    <!-- required: không đc đẻ trống -->
+
+                    <label for="email">Mail:</label>
+                    <input required type="email" id="email" placeholder="Input your email" maxlength="50" />
+
+                    <label>You are:</label>
+                    <input checked type="radio" name="you_are" />
+                    <label class="light">Individual</label>
+                    <input type="radio" name="you_are" />
+                    <label class="light">Corporate</label>
+                    <!-- 2 cái input cùng tên thì thuộc về 1 group -->
+
+                    <label for="why_contact">Why do you contact me?</label>
+                    <!-- <textarea id="why_contact" cols="50" rows="10"></textarea> -->
+                    <div contenteditable="true" style="border: 1px solid #ccc; width: 300px; height: 100px;"></div>
+                    <!-- contenteditable dùng cho thẻ gì cũng đc đều có thể trở thành ô nhập liệu ko có thanh cuộng -->
+                </fieldset>
+
+                <fieldset id="about_you">
+                    <legend>
+                        <span class="number">2</span>About you</legend>
+
+                    <label for="your_url">What is your website?</label>
+                    <input type="url" id="your_url" />
+                    <!-- url: Bắt đầu bằng http -->
+
+                    <label>What are areas of your projects?</label>
+                    <input type="checkbox" id="healthcare" />
+                    <label for="healthcare" class="light">Health Care</label>
+                    <input type="checkbox" id="finance" />
+                    <label for="finance" class="light">Finance</label>
+                    <input type="checkbox" id="education" />
+                    <label for="education" class="light">Education</label>
+
+                    <label>How many people in your company?</label>
+                    <select>
+                        <option selected>1 - 10</option>
+                        <option>11 - 20</option>
+                        <option>More than 50</option>
+                    </select>
+
+                    <label>What is your role?</label>
+                    <select>
+                        <optgroup label="Web">
+                            <option>Web Developer</option>
+                            <option>Web Designer</option>
+                            <option>Full stack Web Deverloper</option>
+                        </optgroup>
+                        <optgroup label="Architect">
+                            <option>Software Architect</option>
+                            <option>Database Architect</option>
+                            <option>System Architect</option>
+                        </optgroup>
+                    </select>
+                </fieldset>
+                <!-- <input type="submit" value="Contact me" /> -->
+                <!-- Không dùng thẻ input vì mất công và không chèn đc icon -->
+                <button type="submit" id="submit">Contact me</button>
+                <!-- Có tác dụng gửi về BackEnd -->
+                <button type="reset" id="clear">Clear</button>
+            </form>
+            <address><i class="fa fa-phone"></i>01234-5678</address>
+            <!-- <address>: nhấn mạnh thông tin liên hệ -->
+        </section>
+    </section>
+
+    <footer>
+        <div id="footer-icon">
+            <ul>
+                <li>
+                    <a href="#" id="google">
+                        <i class="fa fa-google-plus-square" aria-hidden="true"></i> Google
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="facebook">
+                        <i class="fa fa-facebook-square" aria-hidden="true"></i> Facebook</a>
+                </li>
+                <li>
+                    <a href="#" id="youtube">
+                        <i class="fa fa-youtube-square" aria-hidden="true"></i> Youtube
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div id="footer-infor">
+            &copy; 2018 - Nguyễn Hoàng Bá Khánh
+        </div>
+    </footer>
+
+    <div id="menu_Nav">
+        <div id="icon_child_1">
+            <a href="">
+                <i class="fa fa-google-plus-square" aria-hidden="true"></i> Google+</a>
+        </div>
+        <br>
+        <div id="icon_child_2">
+            <a href="https://www.facebook.com/">
+                <i class="fa fa-facebook-square" aria-hidden="true"></i> Facebook</a>
+        </div>
+        <br>
+        <div id="icon_child_3">
+            <a href="">
+                <i class="fa fa-youtube-square" aria-hidden="true"></i> Youtube</a>
+        </div>
+        <br>
+    </div>
+    <script src="./jquery-3.3.1.min.js"></script>
+    <script>
+        $(function() {
+            $('#cross').hide();
+            $('#hamburger').click(function(e) {
+                e.preventDefault();
+                $('.menu_wrapper').animate({
+                    right: '0'
+                }, 200);
+                $('#hamburger').hide();
+                $('#cross').show();
+            });
+
+            $('#cross').click(function() {
+                $(".menu_wrapper").animate({
+                    right: '-100%'
+                }, 200);
+                $('#cross').hide();
+                $('#hamburger').show();
+            });
+        });
+    </script>
+</body>
+
+</html>
+<!-- CSS: in-line: ghi style trong thẻ <> dùng ít thẻ, internal: dùng style trong thẻ <head>, external: mình dùng css là file ngoài -->
